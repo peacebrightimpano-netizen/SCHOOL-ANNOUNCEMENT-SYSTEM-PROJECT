@@ -14,7 +14,6 @@ exports.getAll = async (req, res) => {
     `
     const params = []
 
-    // If not admin, filter announcements
     if (!user || user.role !== 'admin') {
       if (user) {
         query += ` AND (
@@ -104,12 +103,13 @@ exports.remove = async (req, res) => {
   }
 }
 
-// Get all users (for personal targeting)
+// Get all users (for personal targeting and admin dashboard)
 exports.getUsers = async (req, res) => {
   try {
     const [users] = await db.query(
-      'SELECT id, name, email, profession, level FROM users WHERE role != ?',
-      ['admin']
+      `SELECT id, name, email, profession, level, role, created_at, last_login, last_logout, is_online 
+       FROM users 
+       ORDER BY created_at DESC`
     )
     res.json(users)
   } catch (err) {

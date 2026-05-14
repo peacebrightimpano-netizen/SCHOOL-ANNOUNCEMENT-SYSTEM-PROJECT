@@ -12,9 +12,18 @@
         <p class="text-gray-400 text-lg max-w-xl mb-8">
           Your central hub for all school announcements, updates, and important notices.
         </p>
-        <router-link to="/announcements" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium text-sm hover:bg-indigo-700 transition-colors">
-          Browse All Announcements →
-        </router-link>
+        <div class="flex gap-3">
+          <router-link to="/announcements" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium text-sm hover:bg-indigo-700 transition-colors">
+            Browse Announcements →
+          </router-link>
+          <router-link
+            v-if="auth.isLoggedIn"
+            :to="auth.isAdmin ? '/admin-dashboard' : '/dashboard'"
+            class="bg-white text-gray-900 px-6 py-3 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors"
+          >
+            My Dashboard
+          </router-link>
+        </div>
       </div>
     </div>
 
@@ -34,9 +43,17 @@
             </p>
           </div>
         </div>
-        <button @click="handleLogout" class="bg-gray-100 text-gray-700 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-          Logout
-        </button>
+        <div class="flex gap-3">
+          <router-link
+            :to="auth.isAdmin ? '/admin-dashboard' : '/dashboard'"
+            class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+          >
+            My Dashboard
+          </router-link>
+          <button @click="handleLogout" class="bg-gray-100 text-gray-700 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            Logout
+          </button>
+        </div>
       </div>
     </div>
 

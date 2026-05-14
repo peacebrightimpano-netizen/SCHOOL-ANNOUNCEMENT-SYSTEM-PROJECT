@@ -4,7 +4,8 @@ import AnnouncementList from '../views/AnnouncementList.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
-import AdminPanel from '../views/AdminPanel.vue'
+import AdminDashboard from '../views/AdminDashboard.vue'
+import UserDashboard from '../views/UserDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,11 +16,19 @@ const router = createRouter({
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegisterPage },
     {
-      path: '/admin',
-      component: AdminPanel,
+      path: '/dashboard',
+      component: UserDashboard,
       beforeEnter: () => {
         const user = JSON.parse(localStorage.getItem('user') || 'null')
-        // Redirect to home if not admin
+        if (!user) return '/login'
+        if (user.role === 'admin') return '/admin-dashboard'
+      }
+    },
+    {
+      path: '/admin-dashboard',
+      component: AdminDashboard,
+      beforeEnter: () => {
+        const user = JSON.parse(localStorage.getItem('user') || 'null')
         if (!user || user.role !== 'admin') return '/'
       }
     },

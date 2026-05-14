@@ -5,7 +5,7 @@
 
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="font-display text-3xl font-semibold text-white mb-1">All Announcements</h1>
+        <h1 class="font-display text-3xl font-semibold text-black mb-1">All Announcements</h1>
         <p class="text-gray-500 text-sm">{{ filtered.length }} announcement{{ filtered.length !== 1 ? 's' : '' }} found</p>
       </div>
 

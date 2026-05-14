@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import api from '../api/axios'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -16,7 +17,13 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('token', token)
       localStorage.setItem('user', JSON.stringify(user))
     },
-    logout() {
+    async logout() {
+      try {
+        // Tell backend user logged out
+        await api.post('/auth/logout')
+      } catch {
+        // Continue even if API fails
+      }
       this.token = null
       this.user = null
       localStorage.removeItem('token')

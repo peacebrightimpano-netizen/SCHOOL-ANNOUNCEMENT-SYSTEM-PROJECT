@@ -8,27 +8,22 @@ exports.register = async (req, res) => {
   const { name, email, password, profession, level } = req.body;
 
   try {
-    // Check if user exists
     const [existing] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (existing.length > 0) {
       return res.status(400).json({ message: 'Email already exists' });
     }
 
-    // Validate profession
     const allowedProfessions = ['student', 'teacher', 'staff', 'dean', 'discipline_prefect'];
     if (!allowedProfessions.includes(profession)) {
       return res.status(400).json({ message: 'Invalid profession' });
     }
 
-    // Students must have a level
     if (profession === 'student' && !level) {
       return res.status(400).json({ message: 'Students must select a level' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user
     await db.query(
       'INSERT INTO users (name, email, password, role, profession, level) VALUES (?, ?, ?, ?, ?, ?)',
       [name, email, hashedPassword, 'user', profession, level || null]
@@ -57,6 +52,12 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+
+    // Update last login and online status
+    await db.query(
+      'UPDATE users SET last_login = NOW(), is_online = TRUE WHERE id = ?',
+      [user.id]
+    );
 
     const token = jwt.sign(
       { id: user.id, role: user.role, profession: user.profession, level: user.level },
@@ -102,6 +103,12 @@ exports.googleLogin = async (req, res) => {
       user = newUser[0];
     }
 
+    // Update last login and online status
+    await db.query(
+      'UPDATE users SET last_login = NOW(), is_online = TRUE WHERE id = ?',
+      [user.id]
+    );
+
     const token = jwt.sign(
       { id: user.id, role: user.role, profession: user.profession, level: user.level },
       process.env.JWT_SECRET,
@@ -121,6 +128,19 @@ exports.googleLogin = async (req, res) => {
     });
   } catch (err) {
     console.log('Google login error:', err.message);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// Logout
+exports.logout = async (req, res) => {
+  try {
+    await db.query(
+      'UPDATE users SET last_logout = NOW(), is_online = FALSE WHERE id = ?',
+      [req.user.id]
+    );
+    res.json({ message: 'Logged out successfully' });
+  } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
