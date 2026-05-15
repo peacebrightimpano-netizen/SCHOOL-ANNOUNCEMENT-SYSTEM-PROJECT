@@ -125,7 +125,11 @@ async function login() {
     const res = await api.post('/auth/login', form.value)
     if (res.data.token) {
       auth.login(res.data.token, res.data.user)
-      router.push(res.data.user.role === 'admin' ? '/admin' : '/')
+      if (res.data.user.role === 'admin') {
+        router.push('/admin-dashboard')
+      } else {
+        router.push('/dashboard')
+      }
     } else {
       error.value = res.data.message || 'Invalid email or password.'
     }
