@@ -6,6 +6,7 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import UserDashboard from '../views/UserDashboard.vue'
+import ProfilePage from '../views/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,14 @@ const router = createRouter({
     { path: '/announcements/:id', component: AnnouncementDetail },
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegisterPage },
+    {
+      path: '/profile',
+      component: ProfilePage,
+      beforeEnter: () => {
+        const user = JSON.parse(localStorage.getItem('user') || 'null')
+        if (!user) return '/login'
+      }
+    },
     {
       path: '/dashboard',
       component: UserDashboard,

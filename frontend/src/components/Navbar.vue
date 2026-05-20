@@ -13,7 +13,7 @@
         <router-link to="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Home</router-link>
         <router-link to="/announcements" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Announcements</router-link>
 
-        <!-- User dashboard — only for logged in non-admin -->
+        <!-- User dashboard -->
         <router-link
           v-if="auth.isLoggedIn && !auth.isAdmin"
           to="/dashboard"
@@ -22,7 +22,7 @@
           My Dashboard
         </router-link>
 
-        <!-- Admin dashboard — only for admin -->
+        <!-- Admin dashboard -->
         <router-link
           v-if="auth.isLoggedIn && auth.isAdmin"
           to="/admin-dashboard"
@@ -31,12 +31,24 @@
           Dashboard
         </router-link>
 
+        <!-- Profile -->
+        <router-link
+          v-if="auth.isLoggedIn"
+          to="/profile"
+          class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          Profile
+        </router-link>
+
         <div class="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
+
+        <!-- Notification Bell -->
+        <NotificationBell v-if="auth.isLoggedIn" />
 
         <!-- Dark mode toggle -->
         <button
           @click="theme.toggle()"
-          class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ml-1"
         >
           <span v-if="theme.dark">☀️</span>
           <span v-else>🌙</span>
@@ -53,7 +65,7 @@
             <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white leading-tight">{{ auth.user?.name }}</p>
               <p class="text-xs text-gray-400 capitalize leading-tight">
-                {{ auth.user?.profession }}
+                {{ auth.user?.profession?.replace('_', ' ') }}
                 {{ auth.user?.level ? '· ' + auth.user?.level.toUpperCase() : '' }}
               </p>
             </div>
@@ -81,6 +93,7 @@
 import { useAuthStore } from '../stores/auth'
 import { useThemeStore } from '../stores/theme'
 import { useRouter } from 'vue-router'
+import NotificationBell from './NotificationBell.vue'
 
 const auth = useAuthStore()
 const theme = useThemeStore()

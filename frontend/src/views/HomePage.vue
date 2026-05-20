@@ -2,34 +2,42 @@
   <div>
     <Navbar />
 
-    <!-- Hero with real photo -->
-    <div class="relative border-b border-gray-200 overflow-hidden" style="min-height:420px">
-      <img
-        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&auto=format&fit=crop&q=80"
-        alt="School"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-      <div class="absolute inset-0 bg-gray-900/70"></div>
-      <div class="relative max-w-7xl mx-auto px-6 py-24">
-        <p class="text-indigo-400 text-xs font-medium tracking-widest uppercase mb-4">Official School Portal</p>
-        <h1 class="text-5xl font-semibold text-white leading-tight mb-4">
-          Stay Informed,<br>Stay Ahead.
-        </h1>
-        <p class="text-gray-300 text-lg max-w-xl mb-8">
-          Your central hub for all school announcements, updates, and important notices.
-        </p>
-        <div class="flex gap-3 flex-wrap">
-          <router-link to="/announcements" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium text-sm hover:bg-indigo-700 transition-colors">
-            Browse Announcements →
-          </router-link>
-          <router-link
-            v-if="auth.isLoggedIn"
-            :to="auth.isAdmin ? '/admin-dashboard' : '/dashboard'"
-            class="bg-white text-gray-900 px-6 py-3 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors"
-          >
-            My Dashboard
-          </router-link>
+    <!-- Hero Section -->
+    <div class="bg-gray-900">
+      <div class="max-w-7xl mx-auto px-6 py-16 flex items-center justify-between gap-12">
+
+        <!-- Left Text -->
+        <div class="flex-1">
+          <p class="text-indigo-400 text-xs font-medium tracking-widest uppercase mb-4">Official School Portal</p>
+          <h1 class="text-5xl font-semibold text-white leading-tight mb-4">
+            Stay Informed,<br>Stay Ahead.
+          </h1>
+          <p class="text-gray-300 text-lg max-w-xl mb-8">
+            Your central hub for all school announcements, updates, and important notices.
+          </p>
+          <div class="flex gap-3 flex-wrap">
+            <router-link to="/announcements" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium text-sm hover:bg-indigo-700 transition-colors">
+              Browse Announcements →
+            </router-link>
+            <router-link
+              v-if="auth.isLoggedIn"
+              :to="auth.isAdmin ? '/admin-dashboard' : '/dashboard'"
+              class="bg-white text-gray-900 px-6 py-3 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors"
+            >
+              My Dashboard
+            </router-link>
+          </div>
         </div>
+
+        <!-- Right Image -->
+        <div class="hidden lg:block flex-1">
+          <img
+            src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&fit=crop&q=80"
+            alt="School"
+            class="w-full h-80 object-cover rounded-2xl shadow-2xl"
+          />
+        </div>
+
       </div>
     </div>
 
@@ -112,6 +120,24 @@
         <AnnouncementCard v-for="a in announcements" :key="a.id" :announcement="a" />
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 mt-10">
+      <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">S</div>
+          <span class="text-white font-semibold">SchoolNotice</span>
+        </div>
+        <p class="text-sm">© 2025 SchoolNotice. All rights reserved.</p>
+        <div class="flex gap-4 text-sm">
+          <router-link to="/" class="hover:text-white transition-colors">Home</router-link>
+          <router-link to="/announcements" class="hover:text-white transition-colors">Announcements</router-link>
+          <router-link to="/login" class="hover:text-white transition-colors">Login</router-link>
+          <router-link to="/register" class="hover:text-white transition-colors">Register</router-link>
+        </div>
+      </div>
+    </footer>
+
   </div>
 </template>
 
